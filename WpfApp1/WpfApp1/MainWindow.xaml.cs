@@ -22,12 +22,29 @@ namespace WpfApp1
 
         public ReactivePropertySlim<bool> IsItemVisibled { get; } = new(true);
 
+        public ReactivePropertySlim<bool> IsSelectabled { get; } = new(true);
+
+
         public ReactiveCollection<ComboBoxItem<int>> Items { get; } = [];
 
         public ReactivePropertySlim<int> SelectedValue { get; } = new(0);
 
         public MainWindow()
         {
+            InitComboBoxItems();
+
+            IsSelectabled.Subscribe(x =>
+            {
+                InitComboBoxItems();
+            });
+
+            InitializeComponent();
+        }
+
+        private void InitComboBoxItems()
+        {
+            Items.Clear();
+
             for (int i = 0; i < 5; i++)
             {
                 if (i == 2)
@@ -42,13 +59,16 @@ namespace WpfApp1
                 }
                 else if (i == 3)
                 {
-                    Items.Add(
-                        new()
-                        {
-                            Value = i,
-                            DisplayText = $"{i + 1} : item {i + 1}（表示非表示切り替え）",
-                            IsVisibled = IsItemVisibled.ToReadOnlyReactivePropertySlim(true),
-                        });
+                    if (IsSelectabled.Value)
+                    {
+                        Items.Add(
+                            new()
+                            {
+                                Value = i,
+                                DisplayText = $"{i + 1} : item {i + 1}（表示非表示切り替え）",
+                                IsVisibled = IsItemVisibled.ToReadOnlyReactivePropertySlim(true),
+                            });
+                    }
                 }
                 else
                 {
@@ -61,7 +81,17 @@ namespace WpfApp1
                 }
             }
 
-            InitializeComponent();
+            SelectedValue.ForceNotify();
+
+            CorrectSelectedValue();
+        }
+
+        private void CorrectSelectedValue()
+        {
+            if(!Items.Any(x => x.Value == SelectedValue.Value))
+            {
+                SelectedValue.Value = 0;
+            }
         }
     }
 }

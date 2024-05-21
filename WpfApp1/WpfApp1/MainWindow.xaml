@@ -6,9 +6,12 @@
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Title="MainWindow" Height="200" Width="300">
+        Title="MainWindow" SizeToContent="WidthAndHeight">
     <Grid Margin="5">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -20,7 +23,16 @@
         <CheckBox Grid.Row="1" Margin="5"
                   Content="ComboBoxItemの表示非表示切り替え" IsChecked="{Binding IsItemVisibled.Value}"/>
 
-        <ComboBox Grid.Row="2" Margin="5"
+        <TextBlock Grid.Row="2" Margin="5"
+                   Text="↑キーボードでの項目頭文字入力で設定不可とした項目が設定できてしまう。"/>
+
+        <TextBlock Grid.Row="3" Margin="5"
+                   Text="↓完全に設定不可項目を対応するには、選択肢リストから除外するほかない。"/>
+
+        <CheckBox Grid.Row="4" Margin="5"
+                  Content="ComboBoxItemの表示非表示切り替え" IsChecked="{Binding IsSelectabled.Value}"/>
+
+        <ComboBox Grid.Row="5" Margin="5"
                   ItemsSource="{Binding Items}" SelectedValue="{Binding SelectedValue.Value}"
                   SelectedValuePath="Value" DisplayMemberPath="DisplayText">
             <ComboBox.ItemContainerStyle>
